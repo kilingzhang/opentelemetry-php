@@ -44,7 +44,7 @@ class Log
             'context' => json_encode($context, JSON_UNESCAPED_UNICODE),
         ];
 
-        $logName = trim(OpenTelemetry::getLogPath(), "/") . DS . $level . '.' . date('YmdH') . '.log';
+        $logName = trim(OpenTelemetry::getLogPath(), "/") . DIRECTORY_SEPARATOR . $level . '.' . date('YmdH') . '.log';
         $message = json_encode($data, JSON_UNESCAPED_UNICODE);
         $strDirName = dirname($logName);
         if (!is_dir($strDirName)) {
