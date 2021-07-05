@@ -4,23 +4,51 @@ namespace Kilingzhang\OpenTelemetry;
 
 class OpenTelemetry
 {
-    const OTEL_LOG_DIR = '/var/log/opentelemetry/'; //日志目录
+    private static $OTEL_LOG_DIR = '/var/log/opentelemetry/'; //日志目录
 
     private static $debug = false;
 
     private static $traces = [];
 
-    public static function debug(): bool
+    /**
+     * @param $path
+     */
+    public static function setLogPath($path)
+    {
+        self::$OTEL_LOG_DIR = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getLogPath()
+    {
+        return self::$OTEL_LOG_DIR;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function debug()
     {
         return self::$debug;
     }
 
+    /**
+     * @param $debug
+     */
     public static function setDebug($debug)
     {
         self::$debug = $debug;
     }
 
-    public static function startTracer(string $traceParent = "", string $traceState = "", int $spanKind = SpanKind::kConsumer): bool
+    /**
+     * @param string $traceParent
+     * @param string $traceState
+     * @param int $spanKind
+     * @return bool
+     */
+    public static function startTracer($traceParent = "", $traceState = "", $spanKind = SpanKind::kConsumer)
     {
         if (self::debug()) {
             echo "\n", 'startTracer memory : ', memory_get_usage() / 1024 / 1024, 'M', "\n\n";
@@ -31,7 +59,10 @@ class OpenTelemetry
         return true;
     }
 
-    public static function endTracer(): bool
+    /**
+     * @return bool
+     */
+    public static function endTracer()
     {
         if (function_exists('opentelemetry_shutdown_cli_tracer')) {
             opentelemetry_shutdown_cli_tracer();
@@ -42,7 +73,10 @@ class OpenTelemetry
         return true;
     }
 
-    public static function getTraceId(): string
+    /**
+     * @return string
+     */
+    public static function getTraceId()
     {
         if (function_exists('opentelemetry_get_trace_id')) {
             return opentelemetry_get_trace_id();
@@ -50,7 +84,10 @@ class OpenTelemetry
         return '';
     }
 
-    public static function getServiceName(): string
+    /**
+     * @return string
+     */
+    public static function getServiceName()
     {
         if (function_exists('opentelemetry_get_service_name')) {
             return opentelemetry_get_service_name();
@@ -58,7 +95,10 @@ class OpenTelemetry
         return "";
     }
 
-    public static function getServiceIp(): string
+    /**
+     * @return string
+     */
+    public static function getServiceIp()
     {
         if (function_exists('opentelemetry_get_service_ip')) {
             return opentelemetry_get_service_ip();
@@ -66,12 +106,18 @@ class OpenTelemetry
         return "";
     }
 
-    public static function getClientIp(): string
+    /**
+     * @return mixed|string
+     */
+    public static function getClientIp()
     {
         return get_client_ip();
     }
 
-    public static function getUserId(): string
+    /**
+     * @return string
+     */
+    public static function getUserId()
     {
         if (function_exists('opentelemetry_get_user_id')) {
             return opentelemetry_get_user_id();
@@ -79,14 +125,20 @@ class OpenTelemetry
         return "";
     }
 
-    public static function setUserId(string $userId)
+    /**
+     * @param $userId
+     */
+    public static function setUserId($userId)
     {
         if (function_exists('opentelemetry_set_user_id')) {
             opentelemetry_set_user_id($userId);
         }
     }
 
-    public static function getPPid(): int
+    /**
+     * @return int
+     */
+    public static function getPPid()
     {
         if (function_exists('opentelemetry_get_ppid')) {
             return opentelemetry_get_ppid();

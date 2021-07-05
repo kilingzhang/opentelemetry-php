@@ -11,17 +11,26 @@ class Tracer
      */
     private static $traces = [];
 
+    /**
+     *
+     */
     public static function alwaysSample()
     {
         self::setSampleRatioBased(1);
     }
 
+    /**
+     *
+     */
     public static function neverSample()
     {
         self::setSampleRatioBased(0);
     }
 
-    public static function setSampleRatioBased(int $ratioBased)
+    /**
+     * @param $ratioBased
+     */
+    public static function setSampleRatioBased($ratioBased)
     {
         if (function_exists('opentelemetry_set_sample_ratio_based')) {
             opentelemetry_set_sample_ratio_based($ratioBased);
@@ -29,11 +38,11 @@ class Tracer
     }
 
     /**
-     * @param string $name
-     * @param array $attributes key => value
+     * @param $name
+     * @param $attributes
      * @param int $timestamp
      */
-    public static function addEvent(string $name, array $attributes, int $timestamp = 0)
+    public static function addEvent($name, $attributes, $timestamp = 0)
     {
         empty($timestamp) && $timestamp = time();
         if (function_exists('opentelemetry_add_event')) {

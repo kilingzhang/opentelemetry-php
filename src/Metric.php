@@ -6,7 +6,13 @@ namespace Kilingzhang\OpenTelemetry;
 
 class Metric
 {
-    public static function metric($db, array $fields = [], array $tags = [], $timestamps = 0)
+    /**
+     * @param $db
+     * @param array $fields
+     * @param array $tags
+     * @param int $timestamps
+     */
+    public static function metric($db, $fields = [], $tags = [], $timestamps = 0)
     {
         $microTime = microtime();
         $microTimeArr = explode(' ', $microTime);
@@ -28,7 +34,7 @@ class Metric
             'tags' => $tags,
         ];
 
-        $logName = OpenTelemetry::OTEL_LOG_DIR . $level . '.' . date('YmdH') . '.log';
+        $logName = trim(OpenTelemetry::getLogPath(), "/") . DS . $level . '.' . date('YmdH') . '.log';
         $message = json_encode($data, JSON_UNESCAPED_UNICODE);
         $strDirName = dirname($logName);
         if (!is_dir($strDirName)) {
