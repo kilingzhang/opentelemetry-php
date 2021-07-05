@@ -1,0 +1,30 @@
+{
+  "name": "kilingzhang/opentelemetry-php",
+  "description": "opentelemetry-php-ext sdk",
+  "license": "MIT",
+  "type": "library",
+  "minimum-stability": "beta",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "kilingzhang",
+      "email": "i@kilingzhang.com"
+    }
+  ],
+  "require": {},
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Kilingzhang\\OpenTelemetry\\": "./src/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kilingzhang\\OpenTelemetry\\Tests\\": "./tests/"
+    }
+  }
+}
