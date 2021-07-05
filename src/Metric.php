@@ -34,7 +34,7 @@ class Metric
             'tags' => $tags,
         ];
 
-        $logName = trim(OpenTelemetry::getLogPath(), "/") . DS . $level . '.' . date('YmdH') . '.log';
+        $logName = rtrim(OpenTelemetry::getLogPath(), "/") . DS . $level . '.' . date('YmdH') . '.log';
         $message = json_encode($data, JSON_UNESCAPED_UNICODE);
         $strDirName = dirname($logName);
         if (!is_dir($strDirName)) {
