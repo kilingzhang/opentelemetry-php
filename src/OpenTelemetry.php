@@ -76,6 +76,28 @@ class OpenTelemetry
     /**
      * @return string
      */
+    public static function getTraceParent()
+    {
+        if (function_exists('opentelemetry_get_traceparent')) {
+            return opentelemetry_get_traceparent();
+        }
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTraceState()
+    {
+        if (function_exists('opentelemetry_get_tracestate')) {
+            return opentelemetry_get_tracestate();
+        }
+        return '';
+    }
+
+    /**
+     * @return string
+     */
     public static function getTraceId()
     {
         if (function_exists('opentelemetry_get_trace_id')) {
