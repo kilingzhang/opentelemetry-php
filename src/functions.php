@@ -32,7 +32,7 @@ function trace_debug()
         $class = empty($backtrace['class']) ? '' : $backtrace['class'];
         $type = empty($backtrace['type']) ? '' : $backtrace['type'];
         $function = empty($backtrace['function']) ? '' : $backtrace['function'];
-        if (strstr($class, "Kilingzhang\OpenTelemetry") !== false) {
+        if (strstr($class, "Kilingzhang\OpenTelemetry") !== false || $function === 'trace_debug') {
             continue;
         }
         $function_caller .= "{$class}{$type}{$function}\\";
