@@ -164,6 +164,23 @@ class Tracer
     /**
      * @return string
      */
+    public static function getUserId()
+    {
+        return self::getTraceStateValue('uid');
+    }
+
+    /**
+     * @param $userId
+     * @return false
+     */
+    public static function setUserId($userId)
+    {
+        return self::addTraceState('uid', $userId);
+    }
+
+    /**
+     * @return string
+     */
     public static function getVersion()
     {
         list($version, $traceId, $spanId, $flag) = self::parseTraceParent();

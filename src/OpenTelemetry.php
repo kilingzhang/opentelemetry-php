@@ -102,24 +102,7 @@ class OpenTelemetry
     {
         return get_client_ip();
     }
-
-    /**
-     * @return string
-     */
-    public static function getUserId()
-    {
-        return Tracer::getTraceStateValue('uid');
-    }
-
-    /**
-     * @param $userId
-     * @return false
-     */
-    public static function setUserId($userId)
-    {
-        return Tracer::addTraceState('uid', $userId);
-    }
-
+    
     /**
      * @return int
      */

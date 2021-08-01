@@ -34,8 +34,8 @@ class Log
         $data = [
             'level' => $level,
             'message' => $message,
-            'trace_id' => OpenTelemetry::getTraceId(),
-            'uid' => OpenTelemetry::getUserId(),
+            'trace_id' => Tracer::getTraceId(),
+            'uid' => Tracer::getUserId(),
             'service_name' => OpenTelemetry::getServiceName(),
             'client_ip' => OpenTelemetry::getClientIp(),
             'server_ip' => OpenTelemetry::getServiceIp(),
