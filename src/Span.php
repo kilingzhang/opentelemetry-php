@@ -13,7 +13,7 @@ class Span
     {
         $this->name = $name;
         $this->kind = $kind;
-        $this->startTimeUnixNano = 0;
+        $this->startTimeUnixNano = OpenTelemetry::getUnixNano();
     }
 
     /**
