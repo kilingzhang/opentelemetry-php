@@ -26,11 +26,6 @@ class Log
      */
     private static function log($level, $message, array $context = array())
     {
-        $microTime = microtime();
-        $microTimeArr = explode(' ', $microTime);
-        $sec = $microTimeArr[1];
-        $micro = $microTimeArr[0];
-        $timestamp = intval($sec * 1000 + $micro * 1000);
         $data = [
             'level' => $level,
             'message' => $message,
@@ -39,9 +34,9 @@ class Log
             'service_name' => OpenTelemetry::getServiceName(),
             'client_ip' => OpenTelemetry::getClientIp(),
             'server_ip' => OpenTelemetry::getServiceIp(),
-            'timestamp' => $timestamp,
+            'timestamp' => OpenTelemetry::getUnixNano(),
             'trace' => trace_debug(),
-            'context' => json_encode($context, JSON_UNESCAPED_UNICODE),
+            'context' => $context,
         ];
 
         $logName = rtrim(OpenTelemetry::getLogPath(), "/") . DIRECTORY_SEPARATOR . $level . '.' . date('YmdH') . '.log';

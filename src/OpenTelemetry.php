@@ -11,6 +11,39 @@ class OpenTelemetry
     private static $traces = [];
 
     /**
+     * map [trace_id] : uids
+     * 在此uid内的用户所有请求都是必记录 且会上报debug信息
+     * @var array
+     */
+    private static $allowDebugUids = [];
+
+    public static function getAllowDebugUids()
+    {
+        $traceId = Tracer::getTraceId();
+        return empty(self::$allowDebugUids[$traceId]) ? [] : self::$allowDebugUids[$traceId];
+    }
+
+    public static function isAllowDebugUid()
+    {
+        return in_array(Tracer::getUserId(), self::getAllowDebugUids());
+    }
+
+    /**
+     * @param array $uids
+     * @return bool
+     */
+    public static function setAllowDebugUids($uids = [])
+    {
+        $traceId = Tracer::getTraceId();
+        if (empty($traceId)) {
+            return false;
+        }
+        self::$allowDebugUids[$traceId] = $uids;
+        self::isAllowDebugUid() && Tracer::alwaysSample();
+        return true;
+    }
+
+    /**
      * @param $path
      */
     public static function setLogPath($path)
@@ -102,7 +135,7 @@ class OpenTelemetry
     {
         return get_client_ip();
     }
-    
+
     /**
      * @return int
      */
@@ -112,5 +145,30 @@ class OpenTelemetry
             return opentelemetry_get_ppid();
         }
         return 0;
+    }
+
+    public static function getUnixNano()
+    {
+        if (function_exists('opentelemetry_get_unix_nano')) {
+            return opentelemetry_get_unix_nano();
+        }
+        $microTime = microtime();
+        $microTimeArr = explode(' ', $microTime);
+        $sec = $microTimeArr[1];
+        $micro = $microTimeArr[0];
+        return intval($sec * 1000 + $micro * 1000);
+    }
+
+    public static function getEnvironment()
+    {
+        if (function_exists('opentelemetry_get_environment')) {
+            return opentelemetry_get_environment();
+        }
+        return '';
+    }
+
+    public static function isProEnv()
+    {
+        return self::getEnvironment() === 'production';
     }
 }

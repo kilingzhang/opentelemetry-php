@@ -7,16 +7,11 @@ namespace Kilingzhang\OpenTelemetry;
 class Tracer
 {
     /**
-     * @var array
-     */
-    private static $traces = [];
-
-    /**
      *
      */
     public static function alwaysSample()
     {
-        self::setSampleRatioBased(1);
+        !OpenTelemetry::isAllowDebugUid() && self::setSampleRatioBased(1);
     }
 
     /**
@@ -24,7 +19,7 @@ class Tracer
      */
     public static function neverSample()
     {
-        self::setSampleRatioBased(0);
+        !OpenTelemetry::isAllowDebugUid() && self::setSampleRatioBased(0);
     }
 
     /**
@@ -32,7 +27,7 @@ class Tracer
      */
     public static function setSampleRatioBased($ratioBased)
     {
-        if (function_exists('opentelemetry_set_sample_ratio_based')) {
+        if (!OpenTelemetry::isAllowDebugUid() && function_exists('opentelemetry_set_sample_ratio_based')) {
             opentelemetry_set_sample_ratio_based($ratioBased);
         }
     }
@@ -51,7 +46,7 @@ class Tracer
     /**
      * @return string
      */
-    public static function getSampledTraceParent()
+    public static function getAlwaysSampledTraceParent()
     {
         list($version, $traceId, $spanId, $flag) = self::parseTraceParent();
         return "$version-$traceId-$spanId-01";
@@ -198,14 +193,32 @@ class Tracer
 
     /**
      * @param $name
-     * @param $attributes
-     * @param int $timestamp
+     * @param  $attributes
      */
-    public static function addEvent($name, $attributes, $timestamp = 0)
+    public static function addEvent($name, $attributes = [])
     {
-        empty($timestamp) && $timestamp = time();
-        if (function_exists('opentelemetry_add_event')) {
-            opentelemetry_add_event($name, $attributes, $timestamp);
+        if (is_array($attributes) && function_exists('opentelemetry_add_event')) {
+            opentelemetry_add_event($name, $attributes);
         }
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return bool
+     */
+    public static function addResourceAttribute($key, $value)
+    {
+        // 非字符串数字类型 则通过json转换成字符串
+        !is_numeric($value) && !is_string($value) && $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+
+        if (empty($value)) {
+            return false;
+        }
+
+        if (function_exists('opentelemetry_add_resource_attribute')) {
+            opentelemetry_add_resource_attribute($key, $value);
+        }
+        return true;
     }
 }
