@@ -221,4 +221,24 @@ class Tracer
         }
         return true;
     }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return bool
+     */
+    public static function addAttribute($key, $value)
+    {
+        //非字符串数字类型 则通过json转换成字符串
+        !is_numeric($value) && !is_string($value) && $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+
+        if (empty($value)) {
+            return false;
+        }
+
+        if (function_exists('opentelemetry_add_attribute')) {
+            opentelemetry_add_attribute($key, $value);
+        }
+        return true;
+    }
 }

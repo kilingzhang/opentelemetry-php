@@ -58,6 +58,7 @@ class Log
     public static function emergency($message, array $context = array())
     {
         self::log(self::EMERGENCY, $message, $context);
+        Tracer::addAttribute("logging.emergency.message", $message);
     }
 
     /**
@@ -73,6 +74,7 @@ class Log
     public static function alert($message, array $context = array())
     {
         self::log(self::ALERT, $message, $context);
+        Tracer::addAttribute("logging.alert.message", $message);
     }
 
     /**
@@ -87,6 +89,7 @@ class Log
     public static function critical($message, array $context = array())
     {
         self::log(self::CRITICAL, $message, $context);
+        Tracer::addAttribute("logging.critical.message", $message);
     }
 
     /**
@@ -100,6 +103,7 @@ class Log
     public static function error($message, array $context = array())
     {
         self::log(self::ERROR, $message, $context);
+        Tracer::addAttribute("logging.error.message", $message);
     }
 
     /**
