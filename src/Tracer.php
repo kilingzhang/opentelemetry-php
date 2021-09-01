@@ -78,7 +78,7 @@ class Tracer
         if (function_exists('opentelemetry_add_tracestate')) {
             return opentelemetry_add_tracestate($key, $value);
         } else {
-            is_array(self::$states) && self::$states[$key] = $value;
+            (!is_cli() || (is_cli() && is_array(self::$states))) && self::$states[$key] = $value;
         }
         return false;
     }
