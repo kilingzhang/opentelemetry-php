@@ -126,8 +126,17 @@ class OpenTelemetry
     {
         if (function_exists('opentelemetry_get_service_name')) {
             return opentelemetry_get_service_name();
+        } else {
+            $serviceName = ini_get('opentelemetry.service_name');
+            if (!empty($serviceName)) {
+                return $serviceName;
+            }
+            $serviceName = $_SERVER['SERVER_NAME'];
+            if (!empty($serviceName)) {
+                return $serviceName;
+            }
+            return "cron";
         }
-        return "";
     }
 
     /**
