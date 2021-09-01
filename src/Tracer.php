@@ -146,7 +146,7 @@ class Tracer
     public static function parseTraceParent($traceParent = '')
     {
         empty($traceParent) && $traceParent = self::getTraceParent();
-        empty(self::$traceId) && self::$traceId = md5(microtime_float() . rand(1, 100000));
+        empty(self::$traceId) && self::$traceId = md5(microtime() . rand(1, 100000));
         $version = '00';
         $traceId = self::$traceId;
         $spanId = '';
