@@ -105,6 +105,9 @@ class Tracer
         $traceState = self::getTraceState();
         $traceState = explode(',', $traceState);
         foreach ($traceState as $item) {
+            if (empty($item)) {
+                continue;
+            }
             list($k, $v) = explode('=', $item);
             $traceStates[$k] = $v;
         }

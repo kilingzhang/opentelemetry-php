@@ -93,6 +93,9 @@ class OpenTelemetry
             Tracer::parseTraceParent($traceParent);
             $traceState = explode(',', $traceState);
             foreach ($traceState as $item) {
+                if (empty($item)) {
+                    continue;
+                }
                 list($k, $v) = explode('=', $item);
                 Tracer::addTraceState($k, $v);
             }
