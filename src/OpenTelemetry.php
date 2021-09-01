@@ -187,7 +187,7 @@ class OpenTelemetry
         if (function_exists('opentelemetry_get_environment')) {
             return opentelemetry_get_environment();
         }
-        return '';
+        return 'production';
     }
 
     public static function isProEnv()
