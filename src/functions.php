@@ -84,3 +84,33 @@ function get_client_ip()
     }
     return $real_ip;
 }
+
+function is_cli()
+{
+    return preg_match("/cli/i", php_sapi_name());
+}
+
+/**
+ * 获取服务端ip
+ */
+function get_server_ip()
+{
+    $server_ip = '';
+    if (!is_cli()) {
+        $server_ip = $_SERVER['SERVER_ADDR'];
+    } else {
+        $strCmd = 'ifconfig  eth0';
+        $resFp = popen($strCmd, 'r');
+        $value = fread($resFp, 4096);
+        pclose($resFp);
+        $ips = '';
+        $pattern = '/inet addr\:(\d+\.\d+\.\d+\.\d+)/';
+        if (preg_match_all($pattern, $value, $matches, PREG_SET_ORDER)) {
+            if ($matches[0][1] != '127.0.0.1') {
+                $ips .= $matches[0][1] . ',';
+                $server_ip = $matches[0][1];
+            }
+        }
+    }
+    return $server_ip;
+}

@@ -6,6 +6,22 @@ namespace Kilingzhang\OpenTelemetry;
 
 class Tracer
 {
+
+    private static $traceId = '';
+    private static $states = null;
+
+    public static function reset()
+    {
+        self::$traceId = '';
+        self::$states = null;
+    }
+
+    public static function init()
+    {
+        self::$traceId = '';
+        self::$states = [];
+    }
+
     /**
      *
      */
@@ -61,6 +77,8 @@ class Tracer
     {
         if (function_exists('opentelemetry_add_tracestate')) {
             return opentelemetry_add_tracestate($key, $value);
+        } else {
+            is_array(self::$states) && self::$states[$key] = $value;
         }
         return false;
     }
@@ -73,7 +91,9 @@ class Tracer
         if (function_exists('opentelemetry_get_tracestate')) {
             return opentelemetry_get_tracestate();
         }
-        return '';
+        $state = '';
+        is_array(self::$states) && $state = str_replace('&', ',', http_build_query(self::$states));
+        return $state;
     }
 
     /**
@@ -126,8 +146,9 @@ class Tracer
     public static function parseTraceParent($traceParent = '')
     {
         empty($traceParent) && $traceParent = self::getTraceParent();
+        empty(self::$traceId) && self::$traceId = md5(microtime_float() . rand(1, 100000));
         $version = '00';
-        $traceId = '';
+        $traceId = self::$traceId;
         $spanId = '';
         $flag = '00';
         $parentTrace = self::getTraceParent();

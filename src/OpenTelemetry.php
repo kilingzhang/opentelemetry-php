@@ -88,6 +88,14 @@ class OpenTelemetry
         }
         if (function_exists('opentelemetry_start_cli_tracer')) {
             opentelemetry_start_cli_tracer($traceParent, $traceState, $spanKind);
+        } else {
+            Tracer::init();
+            Tracer::parseTraceParent($traceParent);
+            $traceState = explode(',', $traceState);
+            foreach ($traceState as $item) {
+                list($k, $v) = explode('=', $item);
+                Tracer::addTraceState($k, $v);
+            }
         }
         return true;
     }
@@ -99,6 +107,8 @@ class OpenTelemetry
     {
         if (function_exists('opentelemetry_shutdown_cli_tracer')) {
             opentelemetry_shutdown_cli_tracer();
+        } else {
+            Tracer::reset();
         }
         if (self::debug()) {
             echo "\n", 'endTracer memory : ', memory_get_usage() / 1024 / 1024, 'M', "\n\n";
@@ -124,8 +134,9 @@ class OpenTelemetry
     {
         if (function_exists('opentelemetry_get_service_ip')) {
             return opentelemetry_get_service_ip();
+        } else {
+            return get_client_ip();
         }
-        return "";
     }
 
     /**
