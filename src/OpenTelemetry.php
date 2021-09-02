@@ -147,7 +147,7 @@ class OpenTelemetry
         if (function_exists('opentelemetry_get_service_ip')) {
             return opentelemetry_get_service_ip();
         } else {
-            return get_client_ip();
+            return get_server_ip();
         }
     }
 
