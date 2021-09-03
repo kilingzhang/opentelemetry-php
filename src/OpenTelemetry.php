@@ -142,6 +142,18 @@ class OpenTelemetry
     /**
      * @return string
      */
+    public static function getServiceOperation()
+    {
+        if (!is_cli()) {
+            return $_SERVER['SCRIPT_URL'];
+        } else {
+            return $_SERVER['SCRIPT_NAME'];
+        }
+    }
+
+    /**
+     * @return string
+     */
     public static function getServiceIp()
     {
         if (function_exists('opentelemetry_get_service_ip')) {

@@ -26,6 +26,8 @@ class Log
      */
     private static function log($level, $message, array $context = array())
     {
+        !is_array($context) && $context = [];
+        $context['service_operation'] = OpenTelemetry::getServiceOperation();
         $data = [
             'level' => $level,
             'message' => $message,
@@ -38,7 +40,6 @@ class Log
             'trace' => trace_debug(),
             'context' => $context,
         ];
-
         $logName = rtrim(OpenTelemetry::getLogPath(), "/") . DIRECTORY_SEPARATOR . $level . '.' . date('YmdH') . '.log';
         $message = json_encode($data, JSON_UNESCAPED_UNICODE);
         $strDirName = dirname($logName);
