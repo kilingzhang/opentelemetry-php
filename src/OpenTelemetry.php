@@ -5,6 +5,7 @@ namespace Kilingzhang\OpenTelemetry;
 class OpenTelemetry
 {
     private static $OTEL_LOG_DIR = '/var/log/opentelemetry/'; //日志目录
+    private static $tenant_id = 'vip'; //租户设置
 
     private static $debug = false;
 
@@ -16,6 +17,11 @@ class OpenTelemetry
      * @var array
      */
     private static $allowDebugUids = [];
+
+    public static function bootstrap()
+    {
+        Tracer::addResourceAttribute('deployment.tenant_id', self::getTenantId());
+    }
 
     public static function getAllowDebugUids()
     {
@@ -49,6 +55,23 @@ class OpenTelemetry
     public static function setLogPath($path)
     {
         self::$OTEL_LOG_DIR = $path;
+    }
+
+    /**
+     * @param $path
+     */
+    public static function setTenantId($tenant_id)
+    {
+        self::$tenant_id = $tenant_id;
+
+    }
+
+    /**
+     * @param $path
+     */
+    public static function getTenantId()
+    {
+        return self::$tenant_id;
     }
 
     /**
