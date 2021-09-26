@@ -135,6 +135,7 @@ class Log
 
     /**
      * 详细的调试信息。
+     * 开启debug模式、非线上环境、debug uid
      * 例如: 接口的请求及响应,方法的输入输出
      * @param string $message
      * @param array $context
@@ -142,6 +143,8 @@ class Log
      */
     public static function debug($message, array $context = array())
     {
-        self::log(self::DEBUG, $message, $context);
+        if (OpenTelemetry::debug() || !OpenTelemetry::isProEnv() || OpenTelemetry::isAllowDebugUid()) {
+            self::log(self::DEBUG, $message, $context);
+        }
     }
 }
